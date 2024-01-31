@@ -24,7 +24,7 @@ app.use(express.urlencoded({ extended: true }));
 //cors allows client to make request to server
 app.use(
   cors({
-    origin: "http://localhost:3000",
+    origin: "https://mylink-frontend.onrender.com",
     credentials: true,
   })
 );
