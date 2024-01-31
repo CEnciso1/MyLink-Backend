@@ -77,6 +77,7 @@ app.post("/signup", async (req, res) => {
     }
   } catch (error) {
     console.log(error);
+    res.send("An error has occurred");
   }
 });
 app.get("/signup", (req, res) => {
@@ -104,6 +105,7 @@ app.post("/add-link", async (req, res) => {
     res.send("Links was added");
   } catch (error) {
     console.log(error);
+    res.send("An error has occurred");
   }
 });
 
@@ -145,6 +147,7 @@ app.get("/account-data/:username", async (req, res) => {
     res.send(displayData);
   } catch (error) {
     console.log(error);
+    res.send("An error has occured");
   }
 });
 
