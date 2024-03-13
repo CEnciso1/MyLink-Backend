@@ -58,6 +58,7 @@ app.get("/instagram-auth", async (req, res) => {
 
 app.post("/auth", async (req, res) => {
   const token = req.body.token;
+  console.log(req.session);
   jwt.verify(token, jwtSecret, (err, decoded) => {
     if (err) {
       res.send(false);
@@ -123,65 +124,53 @@ app.post("/logout", (req, res) => {
   res.send({ message: "Logout successful" });
 });
 
-app.post(
-  "/add-link",
-  passport.authenticate("jwt", { session: false }),
-  async (req, res) => {
-    try {
-      console.log(req.session, req.sessionID);
-      const response = await User.findOneAndUpdate(
-        { _id: req.body._id },
-        { $set: { links: req.body.links } },
-        { new: true }
-      );
-      console.log("response", response);
-      res.send("Links was added");
-    } catch (error) {
-      console.log(error);
-      res.send("An error has occurred");
-    }
+app.post("/add-link", passport.authenticate("jwt"), async (req, res) => {
+  try {
+    console.log(req.session, req.sessionID);
+    const response = await User.findOneAndUpdate(
+      { _id: req.body._id },
+      { $set: { links: req.body.links } },
+      { new: true }
+    );
+    console.log("response", response);
+    res.send("Links was added");
+  } catch (error) {
+    console.log(error);
+    res.send("An error has occurred");
   }
-);
+});
 
-app.put(
-  "/delete-link",
-  passport.authenticate("jwt", { session: false }),
-  async (req, res) => {
-    try {
-      console.log(req.session, req.sessionID);
-      response = await User.updateOne(
-        { _id: req.body._id },
-        { $pull: { links: { $eq: req.body.link } } }
-      );
-      res.send("the link was deleted");
-      console.log(response);
-      console.log("The link was deleted");
-    } catch (error) {
-      console.log(error);
-      res.send("An error has occurred");
-    }
+app.put("/delete-link", passport.authenticate("jwt"), async (req, res) => {
+  try {
+    console.log(req.session, req.sessionID);
+    response = await User.updateOne(
+      { _id: req.body._id },
+      { $pull: { links: { $eq: req.body.link } } }
+    );
+    res.send("the link was deleted");
+    console.log(response);
+    console.log("The link was deleted");
+  } catch (error) {
+    console.log(error);
+    res.send("An error has occurred");
   }
-);
+});
 
-app.put(
-  "/edit-link",
-  passport.authenticate("jwt", { session: false }),
-  async (req, res) => {
-    try {
-      console.log("test", req.body);
-      const response = await User.findOneAndUpdate(
-        { _id: req.body._id },
-        { $set: { [`links.${req.body.index}.title`]: req.body.newTitle } },
-        { new: true }
-      );
-      console.log(response);
-      res.send("Update was made");
-    } catch (error) {
-      console.log(error);
-      res.send("An error has occured");
-    }
+app.put("/edit-link", passport.authenticate("jwt"), async (req, res) => {
+  try {
+    console.log("test", req.body);
+    const response = await User.findOneAndUpdate(
+      { _id: req.body._id },
+      { $set: { [`links.${req.body.index}.title`]: req.body.newTitle } },
+      { new: true }
+    );
+    console.log(response);
+    res.send("Update was made");
+  } catch (error) {
+    console.log(error);
+    res.send("An error has occured");
   }
-);
+});
 
 app.get("/account-data/:username", async (req, res) => {
   try {
