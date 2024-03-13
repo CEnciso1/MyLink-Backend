@@ -29,7 +29,7 @@ app.use(express.urlencoded({ extended: true }));
 //cors allows client to make request to server
 app.use(
   cors({
-    origin: "https://mylink-frontend.onrender.com",
+    origin: ["https://mylink-frontend.onrender.com", "http://localhost:3000"],
     credentials: true,
   })
 );
@@ -46,19 +46,23 @@ app.use(passport.initialize());
 app.use(passport.session());
 passportConfig(passport);
 
-app.get("/instagram-auth", async (req, res) => {
-  console.log("INSTAGRAM-AUTH", req.session);
-  try {
-    console.log(req.body);
-    console.log(req.query);
-  } catch (error) {
-    console.log(error);
+app.get(
+  "/instagram-auth",
+  passport.authenticate("jwt", { session: false }),
+  async (req, res) => {
+    console.log("INSTAGRAM-AUTH", req.session);
+    try {
+      console.log(req.body);
+      console.log(req.query);
+    } catch (error) {
+      console.log(error);
+    }
   }
-});
+);
 
 app.post("/auth", async (req, res) => {
   const token = req.body.token;
-  console.log("AUTH", req.session);
+  console.log("AUTH", req.sessionID);
   jwt.verify(token, jwtSecret, (err, decoded) => {
     if (err) {
       res.send(false);
@@ -76,8 +80,8 @@ app.post("/signin", (req, res, next) => {
     else {
       req.logIn(user, (err) => {
         if (err) throw err;
-        //console.log(req.session, req.sessionID);
-        console.log(user.id);
+        res.cookie("sessionID", req.sessionID);
+        console.log("sessionID", req.sessionID);
         const token = jwt.sign(user.toJSON(), jwtSecret);
         return res.send({
           message: "Succesfully Signed In",
@@ -114,47 +118,60 @@ app.get("/signup", (req, res) => {
   console.log(req.body);
 });
 
-app.post("/logout", (req, res) => {
-  console.log(req.session);
-  console.log(req.isAuthenticated());
-  req.logOut(function (err) {
-    console.log("error", err);
-  });
-  console.log(req.isAuthenticated());
-  res.send({ message: "Logout successful" });
-});
-
-app.post("/add-link", passport.authenticate("jwt"), async (req, res) => {
-  try {
-    console.log(req.session, req.sessionID);
-    const response = await User.findOneAndUpdate(
-      { _id: req.body._id },
-      { $set: { links: req.body.links } },
-      { new: true }
-    );
-    console.log("response", response);
-    res.send("Links was added");
-  } catch (error) {
-    console.log(error);
-    res.send("An error has occurred");
+app.post(
+  "/logout",
+  passport.authenticate("jwt", { session: false }),
+  (req, res) => {
+    console.log(req.session);
+    console.log(req.isAuthenticated());
+    req.logOut(function (err) {
+      console.log("error", err);
+    });
+    console.log(req.isAuthenticated());
+    res.send({ message: "Logout successful" });
   }
-});
+);
 
-app.put("/delete-link", passport.authenticate("jwt"), async (req, res) => {
-  try {
-    console.log(req.session, req.sessionID);
-    response = await User.updateOne(
-      { _id: req.body._id },
-      { $pull: { links: { $eq: req.body.link } } }
-    );
-    res.send("the link was deleted");
-    console.log(response);
-    console.log("The link was deleted");
-  } catch (error) {
-    console.log(error);
-    res.send("An error has occurred");
+app.post(
+  "/add-link",
+  passport.authenticate("jwt", { session: false }),
+  async (req, res) => {
+    try {
+      console.log("sessionid", req.sessionID);
+      console.log("user", req.user);
+      console.log("cookies", req.cookies);
+      const response = await User.findOneAndUpdate(
+        { _id: req.body._id },
+        { $set: { links: req.body.links } },
+        { new: true }
+      );
+      res.send("Links was added");
+    } catch (error) {
+      console.log(error);
+      res.send("An error has occurred");
+    }
   }
-});
+);
+
+app.put(
+  "/delete-link",
+  passport.authenticate("jwt", { session: false }),
+  async (req, res) => {
+    try {
+      console.log("SessionId", req.sessionID);
+      response = await User.updateOne(
+        { _id: req.body._id },
+        { $pull: { links: { $eq: req.body.link } } }
+      );
+      res.send("the link was deleted");
+      console.log(response);
+      console.log("The link was deleted");
+    } catch (error) {
+      console.log(error);
+      res.send("An error has occurred");
+    }
+  }
+);
 
 app.put("/edit-link", passport.authenticate("jwt"), async (req, res) => {
   try {
@@ -183,20 +200,24 @@ app.get("/account-data/:username", async (req, res) => {
   }
 });
 
-app.get("/instagram-api", async (req, res) => {
-  try {
-    // const query = req._parsedOriginalUrl.query;
-    console.log(req.query);
-    response = await axios.get("https://api.instagram.com/oauth/authorize", {
-      params: req.query,
-    });
-    console.log("https://www.instagram.com" + response.request.path);
-    res.send("https://www.instagram.com" + response.request.path);
-  } catch (error) {
-    console.log(error);
-    res.send("An error has occured");
+app.get(
+  "/instagram-api",
+  passport.authenticate("jwt", { session: false }),
+  async (req, res) => {
+    try {
+      // const query = req._parsedOriginalUrl.query;
+      console.log(req.query);
+      response = await axios.get("https://api.instagram.com/oauth/authorize", {
+        params: req.query,
+      });
+      console.log("https://www.instagram.com" + response.request.path);
+      res.send("https://www.instagram.com" + response.request.path);
+    } catch (error) {
+      console.log(error);
+      res.send("An error has occured");
+    }
   }
-});
+);
 
 app.listen(5000, () => {
   console.log("listening on port 5000");

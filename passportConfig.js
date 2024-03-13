@@ -8,6 +8,7 @@ require("dotenv").config();
 const jwtSecret = process.env.REACT_APP_JWT_SECRET;
 console.log(jwtSecret);
 const { Strategy, ExtractJwt } = require("passport-jwt");
+const { Serializer } = require("v8");
 const jwtOptions = {
   secretOrKey: jwtSecret,
   jwtFromRequest: ExtractJwt.fromAuthHeaderAsBearerToken(),
@@ -45,8 +46,7 @@ module.exports = function (passport) {
   passport.use(
     new Strategy(jwtOptions, async function (jwtPayload, done) {
       try {
-        console.log("passport", jwtPayload.id);
-        const user = await User.findById(jwtPayload.id);
+        const user = await User.findById(jwtPayload._id);
         if (!user) {
           console.log("no user");
           return done(null, false);
@@ -59,15 +59,14 @@ module.exports = function (passport) {
   );
 
   passport.serializeUser((user, done) => {
-    console.log("serialize");
+    console.log("Serializer");
     done(null, user.id);
   });
 
   passport.deserializeUser(async (id, done) => {
     try {
-      console.log("deserialize");
+      console.log("deserializer");
       const user = await User.findById(id);
-      console.log("deserialize", user);
       done(null, user);
     } catch (error) {
       console.log(error);
