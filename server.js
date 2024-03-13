@@ -48,6 +48,12 @@ passportConfig(passport);
 
 app.get("/instagram-auth", async (req, res) => {
   console.log(req);
+  try {
+    console.log(req.body);
+    console.log(req.query);
+  } catch (error) {
+    console.log(error);
+  }
 });
 
 app.post("/auth", async (req, res) => {
