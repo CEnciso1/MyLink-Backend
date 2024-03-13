@@ -46,19 +46,15 @@ app.use(passport.initialize());
 app.use(passport.session());
 passportConfig(passport);
 
-app.get(
-  "/instagram-auth",
-  passport.authenticate("jwt", { session: false }),
-  async (req, res) => {
-    console.log("INSTAGRAM-AUTH", req.user);
-    try {
-      console.log(req.body);
-      console.log(req.query);
-    } catch (error) {
-      console.log(error);
-    }
+app.get("/instagram-auth", async (req, res) => {
+  console.log("INSTAGRAM-AUTH", req.user);
+  try {
+    console.log(req.body);
+    console.log(req.query);
+  } catch (error) {
+    console.log(error);
   }
-);
+});
 
 app.post("/auth", async (req, res) => {
   const token = req.body.token;
