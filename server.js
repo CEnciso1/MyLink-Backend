@@ -47,7 +47,7 @@ app.use(passport.session());
 passportConfig(passport);
 
 app.get("/instagram-auth", async (req, res) => {
-  console.log(req);
+  console.log("INSTAGRAM-AUTH", req.session);
   try {
     console.log(req.body);
     console.log(req.query);
@@ -58,7 +58,7 @@ app.get("/instagram-auth", async (req, res) => {
 
 app.post("/auth", async (req, res) => {
   const token = req.body.token;
-  console.log(req.session);
+  console.log("AUTH", req.session);
   jwt.verify(token, jwtSecret, (err, decoded) => {
     if (err) {
       res.send(false);
