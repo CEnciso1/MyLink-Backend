@@ -41,7 +41,7 @@ app.use(
   })
 );
 
-app.use(cookieParser(sessionSecret));
+app.use(cookieParser(sessionSecret, { httpOnly: false }));
 app.use(passport.initialize());
 app.use(passport.session());
 passportConfig(passport);
@@ -50,7 +50,7 @@ app.get(
   "/instagram-auth",
   passport.authenticate("jwt", { session: false }),
   async (req, res) => {
-    console.log("INSTAGRAM-AUTH", req.session);
+    console.log("INSTAGRAM-AUTH", req.user);
     try {
       console.log(req.body);
       console.log(req.query);
