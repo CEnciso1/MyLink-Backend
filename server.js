@@ -74,7 +74,7 @@ app.post("/signin", (req, res, next) => {
     if (!user)
       res.send({ message: "Email or password is incorrect", success: false });
     else {
-      req.logIn(user, { session: false }, (err) => {
+      req.logIn(user, (err) => {
         if (err) throw err;
         //console.log(req.session, req.sessionID);
         console.log(user.id);
