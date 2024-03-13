@@ -46,7 +46,9 @@ app.use(passport.initialize());
 app.use(passport.session());
 passportConfig(passport);
 
-app.get("/instagram-auth", async (req, res) => {});
+app.get("/instagram-auth", async (req, res) => {
+  console.log(req);
+});
 
 app.post("/auth", async (req, res) => {
   const token = req.body.token;
