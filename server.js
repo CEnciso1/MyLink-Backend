@@ -50,18 +50,16 @@ app.get("/instagram-auth", async (req, res) => {
   try {
     console.log('req.body', req.body)
     console.log('client_id',process.env.REACT_APP_INSTAGRAM_APP_IDD)
-    const code = req.query.code;
-    const response = await axios.post(
-      "https://api.instagram.com/oauth/access_token",
-      {
-        params: {
-          client_id: process.env.REACT_APP_INSTAGRAM_APP_IDD,
+    const data = {
+      client_id: process.env.REACT_APP_INSTAGRAM_APP_IDD,
           client_secret: process.env.REACT_APP_INSTAGRAM_SECRET,
           code: code,
           grant_type: 'authorization_code',
-          redirect_uri: process.env.REACT_APP_INSTAGRAM_REDIRECT_URI,
-        },
-      }
+          redirect_uri: process.env.REACT_APP_INSTAGRAM_REDIRECT_URI
+    }
+    const code = req.query.code;
+    const response = await axios.post(
+      "https://api.instagram.com/oauth/access_token", data
     );
     res.send(response.data)
   } catch (error) {
