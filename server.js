@@ -65,7 +65,7 @@ app.get("/instagram-auth", async (req, res) => {
     );
     res.send(response.data)
   } catch (error) {
-    console.log(error.error_message)
+    console.log(error)
   }
 });
 
