@@ -48,13 +48,13 @@ passportConfig(passport);
 
 app.get("/instagram-auth", async (req, res) => {
   try {
-    console.log(req.body.clinet_id)
+    console.log('client_id',req.body.clinet_id)
     const code = req.query.code;
     const response = await axios.post(
       "https://api.instagram.com/oauth/access_token",
       {
         params: {
-          client_id: req.body.client_id,
+          client_id: process.env.REACT_APP_INSTAGRAM_APP_IDD,
           client_secret: process.env.REACT_APP_INSTAGRAM_SECRET,
           code: code,
           grant_type: 'authorization_code',
@@ -62,7 +62,7 @@ app.get("/instagram-auth", async (req, res) => {
         },
       }
     );
-    console.log(response);
+    console.log(process.env.REACT_APP_INSTAGRAM_APP_IDD);
     res.send(response.data)
   } catch (error) {
     console.log(error);
