@@ -48,6 +48,7 @@ passportConfig(passport);
 
 app.get("/instagram-auth", async (req, res) => {
   try {
+    console.log(req.body.clinet_id)
     const code = req.query.code;
     const response = await axios.post(
       "https://api.instagram.com/oauth/access_token",
