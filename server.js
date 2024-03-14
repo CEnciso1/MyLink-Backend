@@ -63,10 +63,9 @@ app.get("/instagram-auth", async (req, res) => {
         },
       }
     );
-    console.log(process.env.REACT_APP_INSTAGRAM_APP_IDD);
     res.send(response.data)
   } catch (error) {
-    
+    console.log(error.error_message)
   }
 });
 
