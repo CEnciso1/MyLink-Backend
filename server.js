@@ -49,6 +49,7 @@ passportConfig(passport);
 
 app.get("/instagram-auth", async (req, res) => {
   try {
+    console.log(req.user);
     const code = req.query.code;
     const data = {
       client_id: process.env.REACT_APP_INSTAGRAM_APP_IDD,
