@@ -11,6 +11,7 @@ const app = express();
 require("dotenv").config();
 const mongoose = require("mongoose");
 const crypto = require("crypto");
+const querystring = require("querystring");
 const User = require("./schemas/user");
 const sessionSecret = crypto.randomBytes(32).toString("hex");
 // const jwtSecret = crypto.randomBytes(32).toString("hex");
@@ -48,20 +49,27 @@ passportConfig(passport);
 
 app.get("/instagram-auth", async (req, res) => {
   try {
+    console.log("client_id", process.env.REACT_APP_INSTAGRAM_APP_IDD);
     const code = req.query.code;
+    const data = {
+      client_id: process.env.REACT_APP_INSTAGRAM_APP_IDD,
+      client_secret: process.env.REACT_APP_INSTAGRAM_SECRET,
+      code: code,
+      grant_type: "authorization_code",
+      redirect_uri: process.env.REACT_APP_INSTAGRAM_REDIRECT_URI,
+    };
+    const requestBody = querystring.stringify(data);
     const response = await axios.post(
       "https://api.instagram.com/oauth/access_token",
+      requestBody,
       {
-        params: {
-          client_id: req.body.client_id,
-          client_secret: process.env.REACT_APP_INSTAGRAM_SECRET,
-          code: code,
-          grant_type: "authorization_code",
-          redirect_uri: process.env.REACT_APP_INSTAGRAM_REDIRECT_URI,
+        headers: {
+          "Content-Type": "application/x-www-form-urlencoded",
         },
       }
     );
-    console.log(response);
+    console.log("RESPONSE", response.data);
+    res.send(response.data);
   } catch (error) {
     console.log(error);
   }
