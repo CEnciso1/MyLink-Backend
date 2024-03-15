@@ -224,6 +224,7 @@ app.get(
       response = await axios.get("https://api.instagram.com/oauth/authorize", {
         params: req.query,
       });
+      console.log(response.request);
       console.log("https://www.instagram.com" + response.request.path);
       res.send("https://www.instagram.com" + response.request.path);
     } catch (error) {
