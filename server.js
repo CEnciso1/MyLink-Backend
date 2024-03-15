@@ -56,7 +56,7 @@ app.get("/instagram-auth", async (req, res) => {
           client_id: req.body.client_id,
           client_secret: process.env.REACT_APP_INSTAGRAM_SECRET,
           code: code,
-          grant_type: authorization_code,
+          grant_type: "authorization_code",
           redirect_uri: process.env.REACT_APP_INSTAGRAM_REDIRECT_URI,
         },
       }
