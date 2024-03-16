@@ -109,6 +109,7 @@ app.post(
             user_id: response.data.user_id,
           },
         };
+        console.log("TEST", user, user.apis);
       } else {
         user.apis.instagram = {
           token: longTokenResponse.data.access_token,
