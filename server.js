@@ -116,6 +116,8 @@ app.post(
           user_id: response.data.user_id,
         };
       }
+
+      user.markModified("apis");
       console.log("userDoc", user);
       await user.save();
       // //Get media data
