@@ -101,7 +101,7 @@ app.post(
         {
           params: {
             access_token: longTokenResponse.data.access_token,
-            // fields: ["media_type", "media_url"],
+            fields: "media_type, media_url",
           },
         }
       );
