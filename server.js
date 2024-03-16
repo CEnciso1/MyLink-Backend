@@ -72,17 +72,17 @@ app.post(
   async (req, res) => {
     try {
       console.log(req.body);
-
-      // const response = await axios.post(
-      //   "https://api.instagram.com/oauth/access_token",
-      //   requestBody,
-      //   {
-      //     headers: {
-      //       "Content-Type": "application/x-www-form-urlencoded",
-      //     },
-      //   }
-      // );
-      console.log("RESPONSE");
+      const requestBody = querystring.stringify(req.body);
+      const response = await axios.post(
+        "https://api.instagram.com/oauth/access_token",
+        requestBody,
+        {
+          headers: {
+            "Content-Type": "application/x-www-form-urlencoded",
+          },
+        }
+      );
+      console.log("RESPONSE", response.body);
     } catch (error) {
       console.log(error);
     }
