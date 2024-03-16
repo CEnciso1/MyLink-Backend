@@ -95,17 +95,41 @@ app.post(
         }
       );
       console.log("RESPONSE 2", longTokenResponse.data);
-      //Get media data
-      const mediaDataResponse = await axios.get(
-        `https://graph.instagram.com/${response.data.user_id}/media`,
-        {
-          params: {
-            access_token: longTokenResponse.data.access_token,
-            fields: "media_type, media_url",
+      //Store token and used_id in mongodb
+      const user = await User.findById(user._id);
+      if (!user) {
+        res.send("User not found");
+      }
+      if (!user.apis) {
+        user.apis = {
+          instagram: {
+            token: longTokenResponse.data.access_token,
+            user_id: response.data.user_id,
           },
+        };
+      } else {
+        user.apis.instagram = {
+          token: longTokenResponse.data.access_token,
+          user_id: response.data.user_id,
+        };
+      }
+      user.save((err) => {
+        if (err) {
+          console.log(error);
         }
-      );
-      console.log("RESPONSE 3", mediaDataResponse.data);
+        res.send("Instagram api has been added");
+      });
+      // //Get media data
+      // const mediaDataResponse = await axios.get(
+      //   `https://graph.instagram.com/${response.data.user_id}/media`,
+      //   {
+      //     params: {
+      //       access_token: longTokenResponse.data.access_token,
+      //       fields: "media_type, media_url",
+      //     },
+      //   }
+      // );
+      // console.log("RESPONSE 3", mediaDataResponse.data);
     } catch (error) {
       console.log(error);
     }
