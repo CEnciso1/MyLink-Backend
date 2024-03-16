@@ -82,7 +82,7 @@ app.post(
           },
         }
       );
-      console.log("RESPONSE", response.body);
+      console.log("RESPONSE", response.data);
     } catch (error) {
       console.log(error);
     }
