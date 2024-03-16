@@ -96,7 +96,7 @@ app.post(
       );
       console.log("RESPONSE 2", longTokenResponse.data);
       //Store token and used_id in mongodb
-      const user = await User.findById(user._id);
+      const user = await User.findById(req.user._id);
       if (!user) {
         res.send("User not found");
       }
