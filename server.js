@@ -67,7 +67,7 @@ app.get(
   }
 );
 
-app.get(
+app.post(
   "/instagram-auth",
   passport.authenticate("jwt", { session: false }),
   async (req, res) => {
