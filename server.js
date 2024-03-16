@@ -113,12 +113,7 @@ app.post(
           user_id: response.data.user_id,
         };
       }
-      user.save((err) => {
-        if (err) {
-          console.log(error);
-        }
-        res.send("Instagram api has been added");
-      });
+      await user.save();
       // //Get media data
       // const mediaDataResponse = await axios.get(
       //   `https://graph.instagram.com/${response.data.user_id}/media`,
