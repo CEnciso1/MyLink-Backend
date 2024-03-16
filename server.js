@@ -83,6 +83,18 @@ app.post(
         }
       );
       console.log("RESPONSE", response.data);
+      //Get long lived token
+      const longTokenResponse = await axios.get(
+        "https://graph.instagram.com/access_token",
+        {
+          params: {
+            grant_type: "ig_exchange_token",
+            client_secret: req.body.client_secret,
+            access_token: response.data.access_token,
+          },
+        }
+      );
+      console.log("RESPONSE 2", longTokenResponse.data);
     } catch (error) {
       console.log(error);
     }
