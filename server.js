@@ -97,7 +97,7 @@ app.post(
       console.log("RESPONSE 2", longTokenResponse.data);
       //Get media data
       const mediaDataResponse = await axios.get(
-        `https://graph.instagram.com/${longTokenResponse.data.user_id}/media`,
+        `https://graph.instagram.com/${response.data.user_id}/media`,
         {
           params: {
             access_token: longTokenResponse.data.access_token,
