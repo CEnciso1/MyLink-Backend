@@ -95,6 +95,17 @@ app.post(
         }
       );
       console.log("RESPONSE 2", longTokenResponse.data);
+      //Get media data
+      const mediaDataResponse = await axios.get(
+        `https://graph.instagram.com/${req.body.client_data}/media`,
+        {
+          params: {
+            access_token: longTokenResponse.data.access_token,
+            fields: ["media_type", "media_url"],
+          },
+        }
+      );
+      console.log("RESPONSE 3", mediaDataResponse.data);
     } catch (error) {
       console.log(error);
     }
