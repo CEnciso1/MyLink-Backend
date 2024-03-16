@@ -83,7 +83,7 @@ app.get(
       //     },
       //   }
       // );
-      console.log("RESPONSE", response.data);
+      console.log("RESPONSE");
     } catch (error) {
       console.log(error);
     }
