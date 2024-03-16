@@ -47,32 +47,48 @@ app.use(passport.initialize());
 app.use(passport.session());
 passportConfig(passport);
 
-app.get("/instagram-auth", async (req, res) => {
-  try {
-    console.log(req.user);
-    const code = req.query.code;
-    const data = {
-      client_id: process.env.REACT_APP_INSTAGRAM_APP_IDD,
-      client_secret: process.env.REACT_APP_INSTAGRAM_SECRET,
-      code: code,
-      grant_type: "authorization_code",
-      redirect_uri: process.env.REACT_APP_INSTAGRAM_REDIRECT_URI,
-    };
-    const requestBody = querystring.stringify(data);
-    const response = await axios.post(
-      "https://api.instagram.com/oauth/access_token",
-      requestBody,
-      {
-        headers: {
-          "Content-Type": "application/x-www-form-urlencoded",
-        },
-      }
-    );
-    console.log("RESPONSE", response.data);
-  } catch (error) {
-    console.log(error);
+app.get(
+  "/instagram-api",
+  passport.authenticate("jwt", { session: false }),
+  async (req, res) => {
+    try {
+      // const query = req._parsedOriginalUrl.query;
+      console.log(req.query);
+      response = await axios.get("https://api.instagram.com/oauth/authorize", {
+        params: req.query,
+      });
+      console.log(response.request);
+      console.log("https://www.instagram.com" + response.request.path);
+      res.send("https://www.instagram.com" + response.request.path);
+    } catch (error) {
+      console.log(error);
+      res.send("An error has occured");
+    }
   }
-});
+);
+
+app.get(
+  "/instagram-auth",
+  passport.authenticate("jwt", { session: false }),
+  async (req, res) => {
+    try {
+      console.log(req.body);
+
+      // const response = await axios.post(
+      //   "https://api.instagram.com/oauth/access_token",
+      //   requestBody,
+      //   {
+      //     headers: {
+      //       "Content-Type": "application/x-www-form-urlencoded",
+      //     },
+      //   }
+      // );
+      console.log("RESPONSE", response.data);
+    } catch (error) {
+      console.log(error);
+    }
+  }
+);
 
 app.post("/auth", async (req, res) => {
   const token = req.body.token;
@@ -213,26 +229,6 @@ app.get("/account-data/:username", async (req, res) => {
     res.send("An error has occured");
   }
 });
-
-app.get(
-  "/instagram-api",
-  passport.authenticate("jwt", { session: false }),
-  async (req, res) => {
-    try {
-      // const query = req._parsedOriginalUrl.query;
-      console.log(req.query);
-      response = await axios.get("https://api.instagram.com/oauth/authorize", {
-        params: req.query,
-      });
-      console.log(response.request);
-      console.log("https://www.instagram.com" + response.request.path);
-      res.send("https://www.instagram.com" + response.request.path);
-    } catch (error) {
-      console.log(error);
-      res.send("An error has occured");
-    }
-  }
-);
 
 app.listen(5000, () => {
   console.log("listening on port 5000");
