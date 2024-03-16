@@ -96,8 +96,10 @@ app.post(
       );
       console.log("RESPONSE 2", longTokenResponse.data);
       //Store token and used_id in mongodb
+      console.log(req.user);
       const user = await User.findById(req.user._id);
       if (!user) {
+        console.log("User not found");
         res.send("User not found");
       }
       if (!user.apis) {
@@ -113,6 +115,7 @@ app.post(
           user_id: response.data.user_id,
         };
       }
+      console.log("userDoc", user);
       await user.save();
       // //Get media data
       // const mediaDataResponse = await axios.get(
