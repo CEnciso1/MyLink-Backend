@@ -113,7 +113,7 @@ app.post(
       } else {
         user.apis.instagram = {
           token: longTokenResponse.data.access_token,
-          user_id: response.data.user_id.toString,
+          user_id: response.data.user_id,
         };
       }
 
@@ -125,7 +125,7 @@ app.post(
         `https://graph.instagram.com/${response.data.user_id}/media`,
         {
           params: {
-            access_token: longTokenResponse.data.access_token,
+            access_token: response.data.access_token,
             fields: "media_type, media_url",
           },
         }
