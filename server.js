@@ -113,24 +113,24 @@ app.post(
       } else {
         user.apis.instagram = {
           token: longTokenResponse.data.access_token,
-          user_id: response.data.user_id,
+          user_id: response.data.user_id.toString,
         };
       }
 
       user.markModified("apis");
       console.log("userDoc", user);
       await user.save();
-      // //Get media data
-      // const mediaDataResponse = await axios.get(
-      //   `https://graph.instagram.com/${response.data.user_id}/media`,
-      //   {
-      //     params: {
-      //       access_token: longTokenResponse.data.access_token,
-      //       fields: "media_type, media_url",
-      //     },
-      //   }
-      // );
-      // console.log("RESPONSE 3", mediaDataResponse.data);
+      //Get media data
+      const mediaDataResponse = await axios.get(
+        `https://graph.instagram.com/${response.data.user_id}/media`,
+        {
+          params: {
+            access_token: longTokenResponse.data.access_token,
+            fields: "media_type, media_url",
+          },
+        }
+      );
+      console.log("RESPONSE 3", mediaDataResponse.data);
     } catch (error) {
       console.log(error);
     }
