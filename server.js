@@ -121,6 +121,10 @@ app.post(
       console.log("userDoc", user);
       await user.save();
       //Get media data
+      console.log(
+        typeof response.data.user_id,
+        typeof longTokenResponse.data.access_token
+      );
       const mediaDataResponse = await axios.get(
         `https://graph.instagram.com/${response.data.user_id}/media`,
         {
