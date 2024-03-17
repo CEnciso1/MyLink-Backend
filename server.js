@@ -269,7 +269,9 @@ app.put("/edit-link", passport.authenticate("jwt"), async (req, res) => {
 app.get("/account-data/:username", async (req, res) => {
   try {
     const response = await User.findOne({ username: req.params.username });
-    const displayData = { links: response.links };
+    const displayData = response.apis
+      ? { links: response.links, apis: response.apis }
+      : { links: response.links };
     res.send(displayData);
   } catch (error) {
     console.log(error);
