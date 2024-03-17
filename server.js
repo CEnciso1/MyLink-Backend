@@ -125,7 +125,7 @@ app.post(
         `https://graph.instagram.com/${response.data.user_id}/media`,
         {
           params: {
-            access_token: response.data.access_token,
+            access_token: longTokenResponse.data.access_token,
             fields: "media_type, media_url",
           },
         }
