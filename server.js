@@ -178,7 +178,14 @@ app.post("/signin", (req, res, next) => {
 app.post("/signup", async (req, res) => {
   try {
     const user = await User.findOne({ email: req.body.email });
-    if (user) res.send({ message: "User Already Exist", success: false });
+    const userByUsername = await User.findOne({ username: req.body.username });
+    if (userByUsername)
+      res.send({ message: "Username is taken", success: false });
+    if (user)
+      res.send({
+        message: "User With That Email Already Exist",
+        success: false,
+      });
     else {
       const hashedPassword = await bcrypt.hash(req.body.password, 10);
       const newUser = new User({
