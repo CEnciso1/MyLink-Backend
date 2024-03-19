@@ -143,12 +143,12 @@ app.post(
 
 app.post("/auth", async (req, res) => {
   const token = req.body.token;
-  console.log("AUTH", req.sessionID);
-  jwt.verify(token, jwtSecret, (err, decoded) => {
+  jwt.verify(token, jwtSecret, async (err, decoded) => {
     if (err) {
       res.send(false);
     } else {
-      res.send({ ...decoded, result: true });
+      response = await User.findById(decoded._id);
+      res.send({ ...response, result: true });
     }
   });
 });
