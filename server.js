@@ -47,22 +47,36 @@ app.use(passport.initialize());
 app.use(passport.session());
 passportConfig(passport);
 
-app.get(
-  "/spotify-api",
+app.post(
+  "/spotify-auth",
   passport.authenticate("jwt", { session: false }),
   async (req, res) => {
     try {
-      console.log(req.query);
-      console.log(req);
+      console.log(req.body);
 
-      // const requestBody = querystring.stringify(req.body);
-      // console.log(requestBody);
-      response = await axios.get("https://accounts.spotify.com/authorize", {
-        params: req.body,
+      const requestBody = querystring.stringify({
+        code: req.body.code,
+        redirect_uri: req.body.redirect_uri,
+        grant_type: grant_type,
       });
+      console.log(requestBody);
+      const response = await axios.post(
+        "https://accounts.spotify.com/api/token",
+        requestBody,
+        {
+          headers: {
+            "Content-Type": "application/x-www-form-urlencoded",
+            Authorization:
+              "Basic " +
+              new Buffer.from(
+                req.body.client_id + ":" + req.body.client_secret
+              ).toString("base64"),
+          },
+        }
+      );
+
       console.log(response);
       res.send(response);
-      //res.send("https://www.instagram.com" + response.request.path);
     } catch (error) {
       res.send("An error has occured");
     }
