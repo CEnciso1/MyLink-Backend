@@ -79,11 +79,35 @@ app.post(
         }
       );
 
+      console.log(req.user);
+      const user = await User.findById(req.user._id);
+      if (!user) {
+        console.log("User not found");
+        res.send("User not found");
+      }
+      if (!user.apis) {
+        user.apis = {
+          spotify: {
+            token: response.data.access_token,
+            refresh_token: response.data.refresh_token,
+          },
+        };
+        console.log("TEST", user, user.apis);
+      } else {
+        user.apis.spotify = {
+          token: response.data.access_token,
+          refresh_token: response.data.refresh_token,
+        };
+      }
+      user.markModified("apis");
+      console.log("userDoc", user);
+      await user.save();
+
       console.log(response.data);
       res.send(response.data);
     } catch (error) {
       console.log(error);
-      //res.send("An error has occured");
+      res.send("An error has occured");
     }
   }
 );
