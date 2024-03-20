@@ -55,7 +55,7 @@ app.get(
       console.log(req.query);
       // const requestBody = querystring.stringify(req.body);
       // console.log(requestBody);
-      response = await axios.get("https://api.instagram.com/authorize", {
+      response = await axios.get("https://accounts.spotify.com/authorize", {
         params: req.query,
       });
 
