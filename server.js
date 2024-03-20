@@ -54,12 +54,16 @@ app.post(
     try {
       console.log(req.body);
 
-      const requestBody = querystring.stringify({
+      const data = {
         code: req.body.code,
         redirect_uri: req.body.redirect_uri,
-        grant_type: grant_type,
-      });
+        grant_type: req.body.grant_type,
+      };
+
+      console.log(data);
+      const requestBody = querystring.stringify(data);
       console.log("requestBody", requestBody);
+
       const response = await axios.post(
         "https://accounts.spotify.com/api/token",
         requestBody,
