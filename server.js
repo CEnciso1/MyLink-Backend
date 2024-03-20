@@ -83,7 +83,7 @@ app.post(
       res.send(response.data);
     } catch (error) {
       console.log(error);
-      res.send("An error has occured");
+      //res.send("An error has occured");
     }
   }
 );
