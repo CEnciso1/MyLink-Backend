@@ -62,7 +62,6 @@ app.get(
       res.send(response);
       //res.send("https://www.instagram.com" + response.request.path);
     } catch (error) {
-      console.log(error);
       res.send("An error has occured");
     }
   }
