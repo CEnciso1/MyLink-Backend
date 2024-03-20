@@ -47,6 +47,20 @@ app.use(passport.initialize());
 app.use(passport.session());
 passportConfig(passport);
 
+app.post(
+  "/authorize-user",
+  passport.authenticate("jwt", { session: false }),
+  async (req, res) => {
+    const user = await User.findOne({ username: req.body.username });
+    console.log(user._id, req.user._id);
+    if (user._id == req.user._id) {
+      res.send(true);
+    } else {
+      res.send(false);
+    }
+  }
+);
+
 app.post("/spotify-refresh", async (req, res) => {
   console.log("DATA", req.body);
   const requestBody = querystring.stringify(req.body);
