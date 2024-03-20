@@ -58,7 +58,8 @@ app.get(
       response = await axios.get("https://accounts.spotify.com/authorize", {
         params: req.query,
       });
-
+      console.log(response);
+      res.send(response);
       //res.send("https://www.instagram.com" + response.request.path);
     } catch (error) {
       console.log(error);
