@@ -52,11 +52,11 @@ app.get(
   passport.authenticate("jwt", { session: false }),
   async (req, res) => {
     try {
-      console.log(req.query);
+      console.log(req.body);
       // const requestBody = querystring.stringify(req.body);
       // console.log(requestBody);
       response = await axios.get("https://accounts.spotify.com/authorize", {
-        params: req.query,
+        params: req.body,
       });
       console.log(response);
       res.send(response);
