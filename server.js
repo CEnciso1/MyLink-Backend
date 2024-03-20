@@ -96,6 +96,7 @@ app.post(
       } else {
         user.apis.spotify = {
           token: response.data.access_token,
+          client_id: req.body.client_id,
           refresh_token: response.data.refresh_token,
         };
       }
