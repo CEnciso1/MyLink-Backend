@@ -47,29 +47,6 @@ app.use(passport.initialize());
 app.use(passport.session());
 passportConfig(passport);
 
-app.get("/spotify-refresh", async (req, res) => {
-  console.log("DATA", req.query);
-  const requestBody = querystring.stringify(req.body);
-  console.log("requestBody", requestBody);
-
-  const response = await axios.post(
-    "https://accounts.spotify.com/api/token",
-    requestBody,
-    {
-      headers: {
-        "Content-Type": "application/x-www-form-urlencoded",
-        Authorization:
-          "Basic " +
-          new Buffer.from(
-            req.body.client_id + ":" + req.body.client_secret
-          ).toString("base64"),
-      },
-    }
-  );
-  console.log(response);
-  res.send(response.data);
-});
-
 app.post("/spotify-refresh", async (req, res) => {
   console.log("DATA", req.body);
   const requestBody = querystring.stringify(req.body);
@@ -90,6 +67,7 @@ app.post("/spotify-refresh", async (req, res) => {
       }
     );
     console.log(response);
+    res.send(response.data);
   } catch (error) {
     console.log(error);
   }
