@@ -79,9 +79,10 @@ app.post(
         }
       );
 
-      console.log(response);
-      res.send(response);
+      console.log(response.data);
+      res.send(response.data);
     } catch (error) {
+      console.log(error);
       res.send("An error has occured");
     }
   }
