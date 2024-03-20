@@ -48,6 +48,26 @@ app.use(passport.session());
 passportConfig(passport);
 
 app.get(
+  "/spotiy-api",
+  passport.authenticate("jwt", { session: false }),
+  async (req, res) => {
+    try {
+      console.log(req.query);
+      // const requestBody = querystring.stringify(req.body);
+      // console.log(requestBody);
+      response = await axios.get("https://api.instagram.com/authorize", {
+        params: req.query,
+      });
+
+      //res.send("https://www.instagram.com" + response.request.path);
+    } catch (error) {
+      console.log(error);
+      res.send("An error has occured");
+    }
+  }
+);
+
+app.get(
   "/instagram-api",
   passport.authenticate("jwt", { session: false }),
   async (req, res) => {
@@ -135,7 +155,9 @@ app.post(
         }
       );
       console.log("RESPONSE 3", mediaDataResponse.data);
+      res.send("You've succesfully connected your instagram account");
     } catch (error) {
+      res.send("An error has occured, Instagram account not connected");
       console.log(error);
     }
   }
