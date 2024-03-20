@@ -104,7 +104,7 @@ app.post(
       await user.save();
 
       console.log(response.data);
-      res.send(response.data);
+      res.send("You've successfully connected your Spotify account!");
     } catch (error) {
       console.log(error);
       res.send("An error has occured");
