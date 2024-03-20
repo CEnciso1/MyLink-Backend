@@ -60,7 +60,7 @@ app.post(
         grant_type: req.body.grant_type,
       };
 
-      console.log(data);
+      console.log("DATA", data);
       const requestBody = querystring.stringify(data);
       console.log("requestBody", requestBody);
 
