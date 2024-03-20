@@ -48,7 +48,7 @@ app.use(passport.session());
 passportConfig(passport);
 
 app.get(
-  "/spotiy-api",
+  "/spotify-api",
   passport.authenticate("jwt", { session: false }),
   async (req, res) => {
     try {
