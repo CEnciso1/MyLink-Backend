@@ -52,10 +52,12 @@ app.post(
   passport.authenticate("jwt", { session: false }),
   async (req, res) => {
     const user = await User.findOne({ username: req.body.username });
-    console.log(user._id, req.user._id);
+    console.log(user.username, req.user.username);
     if (user._id == req.user._id) {
+      console.log("true");
       res.send(true);
     } else {
+      console.log(false);
       res.send(false);
     }
   }
