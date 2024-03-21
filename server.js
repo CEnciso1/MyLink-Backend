@@ -53,7 +53,7 @@ app.post(
   async (req, res) => {
     const user = await User.findOne({ username: req.body.username });
     console.log(user.username, req.user.username);
-    if (user._id == req.user._id) {
+    if (user.username == req.user.username) {
       console.log("true");
       res.send(true);
     } else {
